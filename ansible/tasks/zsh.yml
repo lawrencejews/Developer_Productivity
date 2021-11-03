@@ -1,0 +1,37 @@
+- name: Install zsh
+  apt: name=zsh
+  tags:
+    - zsh
+- name: Change shell
+  shell: chsh -s `which zsh`
+  tags:
+    - zsh
+    - name: Install ohmyzsh
+      shell: curl -L https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh | sh
+      tags:
+        - zsh
+    - name: Install the zsh plugin autosuggestions
+      ansible.builtin.git:
+        repo: "https://github.com/zsh-users/zsh-autosuggestions.git"
+        dest: "~/.oh-my-zsh/plugins/zsh-autosuggestions"
+      tags:
+        - zsh
+    - name: Update our zsh plugin autosuggestions
+      shell: sed -i 's/(git/(git zsh-autosuggestions' ~/.zshrc
+      tags:
+        - zsh
+    - name: install node
+      apt:
+        name: ["nodejs", "npm"]
+        tags:
+          - node
+    - name: Install n
+      npm:
+        name: n
+        global: true
+      tags:
+        - node
+    - name: n 14
+      shell: n 14
+      tags:
+        - node
